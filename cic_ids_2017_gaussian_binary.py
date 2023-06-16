@@ -81,25 +81,25 @@ print('len(X[0])', len(X[0]))
 print('Y[0]', Y[0])
 
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=47)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)#, random_state=47)
 print('X_train[0:3]', X_train[0:3])
 print('X_test[0:3]', X_test[0:3])
 print('y_train[0:3]', y_train[0:3])
 print('y_test[0:3]', y_test[0:3])
 # Train a logistic regression classifier on the training set
 # clf = LogisticRegression(penalty=None, C=1e-6, solver='saga', multi_class='ovr', max_iter = 100)
-# clf = DecisionTreeClassifier()
-clf = MLPClassifier(
-    hidden_layer_sizes=(80, 40, 80),
-    solver="adam",
-    activation='logistic',
-    alpha=1e-5,
-    max_iter=200,
-    learning_rate='constant',
-    learning_rate_init=0.2,
-    random_state=1,
-    verbose=True,
-)
+clf = DecisionTreeClassifier()
+# clf = MLPClassifier(
+#     hidden_layer_sizes=(80, 40, 80),
+#     solver="adam",
+#     activation='logistic',
+#     alpha=1e-5,
+#     max_iter=200,
+#     learning_rate='constant',
+#     learning_rate_init=0.2,
+#     random_state=1,
+#     verbose=True,
+# )
 
 
 # clf = GaussianMixture(
@@ -121,6 +121,9 @@ clf = MLPClassifier(
 #     + s(60) + s(61) + s(62) + s(63) + s(64) + s(65) + s(66) + s(67) + s(68) + s(69)
 #     + s(70) + s(71) + s(72) + s(73) + s(74) + s(75) + s(76) + s(77)
 # )
+
+#clf = LogisticGAM()
+
 clf.fit(X_train, y_train)
 
 # # Use the trained classifier to predict the classes of the test set
