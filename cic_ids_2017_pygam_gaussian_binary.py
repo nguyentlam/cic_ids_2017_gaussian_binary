@@ -149,6 +149,8 @@ print("X_test_new[0:3]", X_test_new[0:3])
 
 y_gam_pred = gam.predict(X_test_new)
 
+print('y_gam_pred', y_gam_pred)
+
 i = 0
 for ye in y_gam_pred:
     idx = y_idx_filterd[i]
