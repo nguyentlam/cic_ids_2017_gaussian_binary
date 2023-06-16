@@ -103,7 +103,7 @@ print('y_test[0:3]', y_test[0:3])
 
 
 clf = GaussianMixture(
-    e=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
+    n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
     , reg_covar=1e-6
 )
 
