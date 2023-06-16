@@ -89,23 +89,23 @@ print('y_test[0:3]', y_test[0:3])
 # Train a logistic regression classifier on the training set
 # clf = LogisticRegression(penalty=None, C=1e-6, solver='saga', multi_class='ovr', max_iter = 100)
 # clf = DecisionTreeClassifier()
-# clf = MLPClassifier(
-#     hidden_layer_sizes=(80, 40, 80),
-#     solver="adam",
-#     activation='logistic',
-#     alpha=1e-5,
-#     max_iter=200,
-#     learning_rate='constant',
-#     learning_rate_init=0.2,
-#     random_state=1,
-#     verbose=True,
-# )
-
-
-clf = GaussianMixture(
-    n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
-    , reg_covar=1e-6
+clf = MLPClassifier(
+    hidden_layer_sizes=(80, 40, 80),
+    solver="adam",
+    activation='logistic',
+    alpha=1e-5,
+    max_iter=200,
+    learning_rate='constant',
+    learning_rate_init=0.2,
+    random_state=1,
+    verbose=True,
 )
+
+
+# clf = GaussianMixture(
+#     n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
+#     , reg_covar=1e-6
+# )
 
 # clf = KMeans(
 #     n_clusters=2
