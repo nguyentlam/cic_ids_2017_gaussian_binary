@@ -81,7 +81,7 @@ print('len(X[0])', len(X[0]))
 print('Y[0]', Y[0])
 
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=47)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
 print('X_train[0:3]', X_train[0:3])
 print('X_test[0:3]', X_test[0:3])
 print('y_train[0:3]', y_train[0:3])
@@ -102,25 +102,25 @@ print('y_test[0:3]', y_test[0:3])
 # )
 
 
-# clf = GaussianMixture(
-#     n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
-#     , reg_covar=1e-6
-# )
+clf = GaussianMixture(
+    n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
+    , reg_covar=1e-6
+)
 
 # clf = KMeans(
 #     n_clusters=2
 # )
 
-clf = LogisticGAM(
-    s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7) + s(8) + s(9) 
-    + s(10) + s(11) + s(12) + s(13) + s(14) + s(15) + s(16) + s(17) + s(18) + s(19) 
-    + s(20) + s(21) + s(22) + s(23) + s(24) + s(25) + s(26) + s(27) + s(28) + s(29)
-    + s(30) + s(31) + s(32) + s(33) + s(34) + s(35) + s(36) + s(37) + s(38) + s(39)
-    + s(40) + s(41) + s(42) + s(43) + s(44) + s(45) + s(46) + s(47) + s(48) + s(49)
-    + s(50) + s(51) + s(52) + s(53) + s(54) + s(55) + s(56) + s(57) + s(58) + s(59)
-    + s(60) + s(61) + s(62) + s(63) + s(64) + s(65) + s(66) + s(67) + s(68) + s(69)
-    + s(70) + s(71) + s(72) + s(73) + s(74) + s(75) + s(76) + s(77)
-)
+# clf = LogisticGAM(
+#     s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7) + s(8) + s(9) 
+#     + s(10) + s(11) + s(12) + s(13) + s(14) + s(15) + s(16) + s(17) + s(18) + s(19) 
+#     + s(20) + s(21) + s(22) + s(23) + s(24) + s(25) + s(26) + s(27) + s(28) + s(29)
+#     + s(30) + s(31) + s(32) + s(33) + s(34) + s(35) + s(36) + s(37) + s(38) + s(39)
+#     + s(40) + s(41) + s(42) + s(43) + s(44) + s(45) + s(46) + s(47) + s(48) + s(49)
+#     + s(50) + s(51) + s(52) + s(53) + s(54) + s(55) + s(56) + s(57) + s(58) + s(59)
+#     + s(60) + s(61) + s(62) + s(63) + s(64) + s(65) + s(66) + s(67) + s(68) + s(69)
+#     + s(70) + s(71) + s(72) + s(73) + s(74) + s(75) + s(76) + s(77)
+# )
 
 #clf = LogisticGAM()
 
