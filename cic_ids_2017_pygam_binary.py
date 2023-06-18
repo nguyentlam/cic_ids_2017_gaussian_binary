@@ -101,75 +101,50 @@ print('y_test[0:3]', y_test[0:3])
 #     verbose=True,
 # )
 
-
-clf = GaussianMixture(
-    n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
-    , reg_covar=1e-6
-)
+# clf = GaussianMixture(
+#     n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
+#     , reg_covar=1e-6
+# )
 
 # clf = KMeans(
 #     n_clusters=2
 # )
 
-clf.fit(X_train)
+# clf = LogisticGAM(
+#     s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7) + s(8) + s(9) 
+#     + s(10) + s(11) + s(12) + s(13) + s(14) + s(15) + s(16) + s(17) + s(18) + s(19) 
+#     + s(20) + s(21) + s(22) + s(23) + s(24) + s(25) + s(26) + s(27) + s(28) + s(29)
+#     + s(30) + s(31) + s(32) + s(33) + s(34) + s(35) + s(36) + s(37) + s(38) + s(39)
+#     + s(40) + s(41) + s(42) + s(43) + s(44) + s(45) + s(46) + s(47) + s(48) + s(49)
+#     + s(50) + s(51) + s(52) + s(53) + s(54) + s(55) + s(56) + s(57) + s(58) + s(59)
+#     + s(60) + s(61) + s(62) + s(63) + s(64) + s(65) + s(66) + s(67) + s(68) + s(69)
+#     + s(70) + s(71) + s(72) + s(73) + s(74) + s(75) + s(76) + s(77)
+# )
 
-gam = LogisticGAM(
-    s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7) + s(8) + s(9) 
-    + s(10) + s(11) + s(12) + s(13) + s(14) + s(15) + s(16) + s(17) + s(18) + s(19) 
-    + s(20) + s(21) + s(22) + s(23) + s(24) + s(25) + s(26) + s(27) + s(28) + s(29)
-    + s(30) + s(31) + s(32) + s(33) + s(34) + s(35) + s(36) + s(37) + s(38) + s(39)
-    + s(40) + s(41) + s(42) + s(43) + s(44) + s(45) + s(46) + s(47) + s(48) + s(49)
-    + s(50) + s(51) + s(52) + s(53) + s(54) + s(55) + s(56) + s(57) + s(58) + s(59)
-    + s(60) + s(61) + s(62) + s(63) + s(64) + s(65) + s(66) + s(67) + s(68) + s(69)
-    + s(70) + s(71) + s(72) + s(73) + s(74) + s(75) + s(76) + s(77)
-)
+clf = LogisticGAM()
 
-gam.fit(X_train, y_train.ravel())
+clf.fit(X_train, y_train)
 
-# Use the trained classifier to predict the classes of the test set
+# # Use the trained classifier to predict the classes of the test set
 y_pred = clf.predict(X_test)
 y_val = clf.predict(X_train)
-y_pred_merge = np.array(y_pred, copy=True)
 
-y_idx_filterd = []
-X_test_new = []
-
-i = 0
 y_proba = np.array(clf.predict_proba(X_test))
 
 y_filterd = []
 for y in y_proba:
     if (y[0] > threshold and y[0] < 1 - threshold):
-        y_idx_filterd.append(i)
-        X_test_new.append(X_test[i])
-    i += 1
-print("len(X_test_new)", len(X_test_new))
-print("X_test_new[0:3]", X_test_new[0:3])
-
-
-y_gam_pred = gam.predict(X_test_new)
-
-print('y_gam_pred', y_gam_pred)
-
-i = 0
-for ye in y_gam_pred:
-    idx = y_idx_filterd[i]
-    y_pred_merge[idx] = ye
-    i += 1
- 
-# Evaluate the accuracy of the classifier
+        y_filterd.append(y)
+# # Evaluate the accuracy of the classifier
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 validate = accuracy_score(y_train, y_val)
 print("Validate:", validate)
-accuracy_merge = accuracy_score(y_test, y_pred_merge)
-print("Accuracy Merge:", accuracy_merge)
 
-# print("y_2", y_2[0:100])
-# print("len(y_filterd)", len(y_filterd))
-# print("y_filterd", y_filterd[0:100])
-print("AIC:", clf.aic(X_test))
-print("BIC:", clf.bic(X_test))
+print("len(y_filterd)", len(y_filterd))
+print("y_filterd", y_filterd[0:10])
+# print("AIC:", clf.aic(X_test))
+# print("BIC:", clf.bic(X_test))
 # print("means_", clf.means_)
 # print("weights_", clf.weights_)
 # print("covariances_", clf.covariances_)
