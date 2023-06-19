@@ -131,18 +131,18 @@ y_val = clf.predict(X_train)
 
 y_proba = np.array(clf.predict_proba(X_test))
 
-y_filterd = []
-for y in y_proba:
-    if (y[0] > threshold and y[0] < 1 - threshold):
-        y_filterd.append(y)
+# y_filterd = []
+# for y in y_proba:
+#     if (y[0] > threshold and y[0] < 1 - threshold):
+#         y_filterd.append(y)
 # # Evaluate the accuracy of the classifier
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 validate = accuracy_score(y_train, y_val)
 print("Validate:", validate)
 
-print("len(y_filterd)", len(y_filterd))
-print("y_filterd", y_filterd[0:10])
+# print("len(y_filterd)", len(y_filterd))
+# print("y_filterd", y_filterd[0:10])
 # print("AIC:", clf.aic(X_test))
 # print("BIC:", clf.bic(X_test))
 # print("means_", clf.means_)
