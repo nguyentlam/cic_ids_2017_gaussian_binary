@@ -77,7 +77,7 @@ X_test_new = []
 y_idx_filterd = []
 i = 0
 for ye in y_proba:
-    if (ye[0] > threshold and ye[0] < 1 - threshold):
+    if (ye[1] > threshold and ye[1] < 1 - threshold):
         y_idx_filterd.append(i)
         X_test_new.append(X_test[i])
     i += 1
