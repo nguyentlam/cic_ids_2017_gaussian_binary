@@ -4,7 +4,7 @@ from pygam import LogisticGAM, f, s
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import Normalizer, OrdinalEncoder
+from sklearn.preprocessing import Normalizer, OrdinalEncoder, StandardScaler
 
 cids = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
 # Replacing infinite with nan
@@ -42,6 +42,7 @@ numberic_columns = [' Destination Port', ' Flow Duration', ' Total Fwd Packets',
        ' Active Min', 'Idle Mean', ' Idle Std', ' Idle Max', ' Idle Min']
 
 ct = ColumnTransformer(transformers = [#('normalize', Normalizer(norm='l2'), numberic_columns),
+                                          ('standard', StandardScaler(), numberic_columns),
                                        ("label", OrdinalEncoder(), categorical_columns)], remainder = 'passthrough')
 
 ct.fit(cids)
