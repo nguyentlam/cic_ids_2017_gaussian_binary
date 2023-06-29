@@ -1,9 +1,10 @@
+
 import numpy as np
 import pandas as pd
-from pygam import LogisticGAM, f, s
 from sklearn.compose import ColumnTransformer
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.metrics import accuracy_score
+from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import KFold, cross_val_score, train_test_split
 from sklearn.preprocessing import Normalizer, OrdinalEncoder, StandardScaler
 
@@ -13,7 +14,7 @@ cids.replace([np.inf, -np.inf], np.nan, inplace=True)
   
 # Dropping all the rows with nan values
 cids.dropna(inplace=True)
-  
+
 categorical_columns = [' Label']
 numberic_columns = [' Destination Port', ' Flow Duration', ' Total Fwd Packets',
        ' Total Backward Packets', 'Total Length of Fwd Packets',
@@ -43,7 +44,7 @@ numberic_columns = [' Destination Port', ' Flow Duration', ' Total Fwd Packets',
        ' Active Min', 'Idle Mean', ' Idle Std', ' Idle Max', ' Idle Min']
 
 ct = ColumnTransformer(transformers = [#('normalize', Normalizer(norm='l2'), numberic_columns),
-                                          ('standard', StandardScaler(), numberic_columns),
+                                        ('standard', StandardScaler(), numberic_columns),
                                        ("label", OrdinalEncoder(), categorical_columns)], remainder = 'passthrough')
 
 ct.fit(cids)
@@ -61,11 +62,11 @@ num_folds = 5
 # Create the k-fold cross-validation object
 kfold = KFold(n_splits=num_folds)
 
-clf = LogisticGAM()
-# print('self.coef_[0]', clf.coef_[0])
-# print('self.coef_', clf.coef_)
+clf = GaussianMixture(
+    n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
+    , reg_covar=1e-6
+)
 
-# Perform feature selection and cross-validation
 for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
     y_train, y_val = y[train_index], y[val_index]
@@ -80,13 +81,13 @@ for train_index, val_index in kfold.split(X):
 
     print("Validation Accuracy:", score)
 
-# # Perform k-fold cross-validation
+# Perform k-fold cross-validation
 # scores = cross_val_score(clf, X, Y, cv=kfold)
 
 # # Print the accuracy for each fold
 # for fold, score in enumerate(scores):
 #     print(f"Fold {fold + 1}: Accuracy = {score:.2f}")
 
-# Calculate and print the average accuracy across all folds
+# # Calculate and print the average accuracy across all folds
 # average_accuracy = scores.mean()
 # print(f"\nAverage Accuracy: {average_accuracy:.2f}")
