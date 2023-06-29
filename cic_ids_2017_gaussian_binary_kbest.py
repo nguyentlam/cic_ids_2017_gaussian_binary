@@ -91,7 +91,7 @@ for train_index, val_index in kfold.split(X):
     print("Accuracy:", accuracy)
     accuracies.append(accuracy)
 
-average_accuracy = accuracies.mean()
+average_accuracy = sum(accuracies) / len(accuracies)
 print(f"\nAverage Accuracy: {average_accuracy:.2f}")
 
 # Perform k-fold cross-validation
