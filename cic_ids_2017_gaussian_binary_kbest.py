@@ -76,7 +76,7 @@ for train_index, val_index in kfold.split(X):
     X_val_selected = k_best.transform(X_val)
 
     # Train and evaluate your model
-    # clf.fit(X_train_selected, y_train)
+    clf.fit(X_train_selected, y_train)
 
     # score = clf.score(X_val_selected, y_val)
     # Use the trained classifier to predict the classes of the test set
