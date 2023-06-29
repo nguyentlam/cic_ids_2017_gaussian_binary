@@ -64,11 +64,17 @@ num_folds = 5
 # Create the k-fold cross-validation object
 kfold = KFold(n_splits=num_folds)
 
-clf = LogisticGAM()
+# create lam parameter for PyGAM classifier
+lamda = 1.0
+lam = np.empty(k_feature)
+lam.fill(lamda)
+
+clf = LogisticGAM(lam=lam)
 # print('self.coef_[0]', clf.coef_[0])
 # print('self.coef_', clf.coef_)
 
 accuracies = []
+
 # Perform feature selection and cross-validation
 for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
@@ -89,7 +95,8 @@ for train_index, val_index in kfold.split(X):
     print("Accuracy:", accuracy)
 
     accuracies.append(accuracy)
-    
+
+print("Accuracies", accuracies)    
 average_accuracy = sum(accuracies) / len(accuracies)
 print(f"\nAverage Accuracy: {average_accuracy:.2f}")
 # # Perform k-fold cross-validation
@@ -101,4 +108,5 @@ print(f"\nAverage Accuracy: {average_accuracy:.2f}")
 
 # Calculate and print the average accuracy across all folds
 # average_accuracy = scores.mean()
+# print(f"\nAverage Accuracy: {average_accuracy:.2f}")
 # print(f"\nAverage Accuracy: {average_accuracy:.2f}")
