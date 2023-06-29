@@ -73,11 +73,12 @@ for train_index, val_index in kfold.split(X):
 
     # Feature selection
     X_train_selected = k_best.fit_transform(X_train, y_train)
+    X_val_selected = k_best.transform(X_val)
 
     # Train and evaluate your model
     clf.fit(X_train_selected, y_train)
 
-    score = clf.score(X_val, y_val)
+    score = clf.score(X_val_selected, y_val)
 
     print("Validation Accuracy:", score)
 
