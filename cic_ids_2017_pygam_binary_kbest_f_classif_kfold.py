@@ -62,6 +62,8 @@ num_folds = 5
 kfold = KFold(n_splits=num_folds)
 
 clf = LogisticGAM()
+print('self.coef_[0]', clf.coef_[0])
+print('self.coef_', clf.coef_)
 
 # Perform feature selection and cross-validation
 for train_index, val_index in kfold.split(X):
