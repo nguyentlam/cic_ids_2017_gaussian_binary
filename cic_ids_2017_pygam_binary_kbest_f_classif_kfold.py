@@ -83,6 +83,12 @@ for train_index, val_index in kfold.split(X):
     # Feature selection
     X_train_selected = k_best.fit_transform(X_train, y_train)
     X_val_selected = k_best.transform(X_val)
+    
+    # Feature selected infomation
+    feature0 = k_best.get_support(indices=False)
+    feature1 = k_best.get_support(indices=True)
+    print('feature0', feature0)
+    print('feature1', feature1)
 
     # Train and evaluate your model
     clf.fit(X_train_selected, y_train)
@@ -90,7 +96,7 @@ for train_index, val_index in kfold.split(X):
     # score = clf.score(X_val_selected, y_val)
     y_pred = clf.predict(X_val_selected)
 
-    # # Evaluate the accuracy of the classifier
+    # Evaluate the accuracy of the classifier
     accuracy = accuracy_score(y_val, y_pred)
     print("Accuracy:", accuracy)
 
