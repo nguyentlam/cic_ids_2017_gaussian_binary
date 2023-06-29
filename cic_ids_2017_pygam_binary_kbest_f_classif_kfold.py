@@ -65,6 +65,7 @@ clf = LogisticGAM()
 # print('self.coef_[0]', clf.coef_[0])
 # print('self.coef_', clf.coef_)
 
+accuracies = []
 # Perform feature selection and cross-validation
 for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
@@ -72,13 +73,19 @@ for train_index, val_index in kfold.split(X):
 
     # Feature selection
     X_train_selected = k_best.fit_transform(X_train, y_train)
+    X_val_selected = k_best.transform(X_val)
 
     # Train and evaluate your model
     clf.fit(X_train_selected, y_train)
 
-    score = clf.score(X_val, y_val)
+    # score = clf.score(X_val_selected, y_val)
+    y_pred = clf.predict(X_val_selected)
 
-    print("Validation Accuracy:", score)
+    # # Evaluate the accuracy of the classifier
+    accuracy = accuracy_score(y_val, y_pred)
+    print("Accuracy:", accuracy)
+
+    accuracies.append(accuracy)
 
 # # Perform k-fold cross-validation
 # scores = cross_val_score(clf, X, Y, cv=kfold)

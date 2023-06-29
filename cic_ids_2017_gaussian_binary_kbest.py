@@ -70,6 +70,7 @@ clf = GaussianMixture(
     , reg_covar=1e-6
 )
 
+accuracies = []
 for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
     y_train, y_val = y[train_index], y[val_index]
@@ -88,6 +89,10 @@ for train_index, val_index in kfold.split(X):
     # # Evaluate the accuracy of the classifier
     accuracy = accuracy_score(y_val, y_pred)
     print("Accuracy:", accuracy)
+    accuracies.append(accuracy)
+
+average_accuracy = accuracies.mean()
+print(f"\nAverage Accuracy: {average_accuracy:.2f}")
 
 # Perform k-fold cross-validation
 # scores = cross_val_score(clf, X, Y, cv=kfold)
