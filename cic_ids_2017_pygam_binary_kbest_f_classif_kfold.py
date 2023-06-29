@@ -65,7 +65,7 @@ num_folds = 5
 kfold = KFold(n_splits=num_folds)
 
 # create lam parameter for PyGAM classifier
-lamda = 1.0
+lamda = 10.0
 lam = np.empty(k_feature)
 lam.fill(lamda)
 
