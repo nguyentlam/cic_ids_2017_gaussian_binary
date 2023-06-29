@@ -67,7 +67,7 @@ X_train_selected = k_best.fit_transform(X, y)
 num_folds = 5
 
 # Create the k-fold cross-validation object
-kfold = KFold(n_splits=num_folds)
+kfold = KFold(n_splits=num_folds, random_state=42, shuffle=True)
 
 clf = GaussianMixture(
     n_components=2, covariance_type="tied", max_iter=100, random_state=0, init_params='k-means++'
