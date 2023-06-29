@@ -52,8 +52,11 @@ cids_transformed = ct.transform(cids)
 X = cids_transformed[:, 0:78]
 y = cids_transformed[:, 78]
 
+# Define the number of features for feature selection
+k_feature = 10
+
 # Create an instance of SelectKBest with the desired scoring function
-k_best = SelectKBest(score_func=f_classif)
+k_best = SelectKBest(score_func=f_classif, k=k_feature)
 
 # Define the number of folds for cross-validation
 num_folds = 5
