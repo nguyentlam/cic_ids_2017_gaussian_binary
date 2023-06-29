@@ -90,7 +90,8 @@ for train_index, val_index in kfold.split(X):
     accuracy = accuracy_score(y_val, y_pred)
     print("Accuracy:", accuracy)
     accuracies.append(accuracy)
-
+    
+print("Accuracies", accuracies) 
 average_accuracy = sum(accuracies) / len(accuracies)
 print(f"\nAverage Accuracy: {average_accuracy:.2f}")
 
