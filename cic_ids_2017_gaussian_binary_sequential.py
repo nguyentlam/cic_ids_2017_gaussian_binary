@@ -55,7 +55,7 @@ X = cids_transformed[:, 0:78]
 y = cids_transformed[:, 78]
 
 # Define the number of features for feature selection
-k_feature = 10
+k_feature = 'auto'#10
 
 # Define the number of folds for cross-validation
 num_folds = 5
@@ -68,9 +68,10 @@ clf = GaussianMixture(
     , reg_covar=1e-6
 )
 
-sfs = SequentialFeatureSelector(clf, n_features_to_select=k_feature, cv=num_folds)
+sfs = SequentialFeatureSelector(clf, n_features_to_select=k_feature, tol = 1e-6, cv=num_folds)
 
 X_train_selected = sfs.fit_transform(X, y)
+print("Selected Features", sfs.get_support())
 
 accuracies = []
 for train_index, val_index in kfold.split(X_train_selected):
