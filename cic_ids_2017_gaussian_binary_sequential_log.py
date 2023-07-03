@@ -1,0 +1,121 @@
+
+import logging
+import os
+from datetime import datetime
+
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.feature_selection import (SelectKBest, SequentialFeatureSelector,
+                                       f_classif)
+from sklearn.metrics import accuracy_score
+from sklearn.mixture import GaussianMixture
+from sklearn.model_selection import KFold, cross_val_score, train_test_split
+from sklearn.preprocessing import Normalizer, OrdinalEncoder, StandardScaler
+
+dir_name = os.path.basename(__file__).removesuffix(".py")
+filename = "log " + datetime.now().strftime("%m-%d-%Y %H-%M-%S") + ".txt"
+log_file = os.path.join(dir_name, filename)
+os.makedirs(dir_name, exist_ok=True)
+logging.basicConfig(filename=log_file, level=logging.DEBUG,
+                    format="%(asctime)s %(message)s")
+
+cids = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
+# Replacing infinite with nan
+cids.replace([np.inf, -np.inf], np.nan, inplace=True)
+  
+# Dropping all the rows with nan values
+cids.dropna(inplace=True)
+
+categorical_columns = [' Label']
+numberic_columns = [' Destination Port', ' Flow Duration', ' Total Fwd Packets',
+       ' Total Backward Packets', 'Total Length of Fwd Packets',
+       ' Total Length of Bwd Packets', ' Fwd Packet Length Max',
+       ' Fwd Packet Length Min', ' Fwd Packet Length Mean',
+       ' Fwd Packet Length Std', 'Bwd Packet Length Max',
+       ' Bwd Packet Length Min', ' Bwd Packet Length Mean',
+       ' Bwd Packet Length Std', 'Flow Bytes/s', ' Flow Packets/s',
+       ' Flow IAT Mean', ' Flow IAT Std', ' Flow IAT Max', ' Flow IAT Min',
+       'Fwd IAT Total', ' Fwd IAT Mean', ' Fwd IAT Std', ' Fwd IAT Max',
+       ' Fwd IAT Min', 'Bwd IAT Total', ' Bwd IAT Mean', ' Bwd IAT Std',
+       ' Bwd IAT Max', ' Bwd IAT Min', 'Fwd PSH Flags', ' Bwd PSH Flags',
+       ' Fwd URG Flags', ' Bwd URG Flags', ' Fwd Header Length',
+       ' Bwd Header Length', 'Fwd Packets/s', ' Bwd Packets/s',
+       ' Min Packet Length', ' Max Packet Length', ' Packet Length Mean',
+       ' Packet Length Std', ' Packet Length Variance', 'FIN Flag Count',
+       ' SYN Flag Count', ' RST Flag Count', ' PSH Flag Count',
+       ' ACK Flag Count', ' URG Flag Count', ' CWE Flag Count',
+       ' ECE Flag Count', ' Down/Up Ratio', ' Average Packet Size',
+       ' Avg Fwd Segment Size', ' Avg Bwd Segment Size',
+       ' Fwd Header Length.1', 'Fwd Avg Bytes/Bulk', ' Fwd Avg Packets/Bulk',
+       ' Fwd Avg Bulk Rate', ' Bwd Avg Bytes/Bulk', ' Bwd Avg Packets/Bulk',
+       'Bwd Avg Bulk Rate', 'Subflow Fwd Packets', ' Subflow Fwd Bytes',
+       ' Subflow Bwd Packets', ' Subflow Bwd Bytes', 'Init_Win_bytes_forward',
+       ' Init_Win_bytes_backward', ' act_data_pkt_fwd',
+       ' min_seg_size_forward', 'Active Mean', ' Active Std', ' Active Max',
+       ' Active Min', 'Idle Mean', ' Idle Std', ' Idle Max', ' Idle Min']
+
+ct = ColumnTransformer(transformers = [('normalize', Normalizer(norm='l2'), numberic_columns),
+                                        #('standard', StandardScaler(), numberic_columns),
+                                       ("label", OrdinalEncoder(), categorical_columns)], remainder = 'passthrough')
+
+ct.fit(cids)
+cids_transformed = ct.transform(cids)
+
+X = cids_transformed[:, 0:78]
+y = cids_transformed[:, 78]
+
+# Define the number of features for feature selection
+k_feature = 'auto'#10
+
+# Define the number of folds for cross-validation
+num_folds = 5
+
+# Create the k-fold cross-validation object
+kfold = KFold(n_splits=num_folds, random_state=42, shuffle=True)
+
+clf = GaussianMixture(
+    n_components=2, covariance_type="full", max_iter=100, random_state=0, init_params='k-means++'
+    , reg_covar=1e-6
+)
+
+sfs = SequentialFeatureSelector(clf, n_features_to_select=k_feature, tol = 1e-6, cv=num_folds)
+
+X_train_selected = sfs.fit_transform(X, y)
+print("Selected Features", sfs.get_support())
+logging.info("Selected Features: %s", sfs.get_support())
+
+X_train_selected.k
+accuracies = []
+for train_index, val_index in kfold.split(X_train_selected):
+    X_train, X_val = X_train_selected[train_index], X_train_selected[val_index]
+    y_train, y_val = y[train_index], y[val_index]
+
+    # Train and evaluate your model
+    clf.fit(X_train, y_train)
+
+    # score = clf.score(X_val_selected, y_val)
+    # Use the trained classifier to predict the classes of the test set
+    y_pred = clf.predict(X_val)
+
+    # # Evaluate the accuracy of the classifier
+    accuracy = accuracy_score(y_val, y_pred)
+    print("Accuracy:", accuracy)
+    accuracies.append(accuracy)
+    
+print("Accuracies", accuracies) 
+average_accuracy = sum(accuracies) / len(accuracies)
+print(f"\nAverage Accuracy: {average_accuracy:.2f}")
+
+logging.info("Average Accuracy: %s", average_accuracy)
+
+# Perform k-fold cross-validation
+# scores = cross_val_score(clf, X, Y, cv=kfold)
+
+# # Print the accuracy for each fold
+# for fold, score in enumerate(scores):
+#     print(f"Fold {fold + 1}: Accuracy = {score:.2f}")
+
+# # Calculate and print the average accuracy across all folds
+# average_accuracy = scores.mean()
+# print(f"\nAverage Accuracy: {average_accuracy:.2f}")
