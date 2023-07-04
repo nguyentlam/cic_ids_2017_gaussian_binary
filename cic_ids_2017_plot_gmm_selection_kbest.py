@@ -174,7 +174,8 @@ from matplotlib.patches import Ellipse
 from scipy import linalg
 
 color_iter = sns.color_palette("tab10", 2)[::-1]
-Y_ = grid_search.predict(X)
+#Y_ = grid_search.predict(X)
+Y_ = grid_search.predict(X_train_selected)
 
 fig, ax = plt.subplots()
 
