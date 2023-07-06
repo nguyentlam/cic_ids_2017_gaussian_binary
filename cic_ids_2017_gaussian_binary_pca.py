@@ -74,8 +74,8 @@ pca = PCA(n_components=k_feature)
 X_train_transformed = pca.fit_transform(X, y)
 
 accuracies = []
-for train_index, val_index in kfold.split(X_train_selected):
-    X_train, X_val = X_train_selected[train_index], X_train_selected[val_index]
+for train_index, val_index in kfold.split(X_train_transformed):
+    X_train, X_val = X_train_transformed[train_index], X_train_transformed[val_index]
     y_train, y_val = y[train_index], y[val_index]
 
     # Train and evaluate your model
