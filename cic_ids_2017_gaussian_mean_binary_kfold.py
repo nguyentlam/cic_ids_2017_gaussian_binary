@@ -57,17 +57,20 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_
 # Define the number of folds for cross-validation
 num_folds = 5
 
+# Create the k-fold cross-validation object
+kfold = KFold(n_splits=num_folds, random_state=42, shuffle=True)
+
 n_classes = 2
 
 accuracies = []
-for train_index, val_index in KFold.split(X):
+for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
     y_train, y_val = Y[train_index], Y[val_index]
 
     initial_means = np.array(
         [X_train[y_train == i].mean(axis=0) for i in range(n_classes)]
     )
-    
+
     print('initial_means', initial_means)
     # Train a Gaussian Mixture classifier on the training set
     clf = GaussianMixture(
