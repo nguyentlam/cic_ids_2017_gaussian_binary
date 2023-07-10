@@ -55,17 +55,21 @@ Y = cids_transformed[:, 78]
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
 
 n_classes = 2
-initial_means = []
 
-for i in range(n_classes):
-    ids = np.where(np.array(y_train) == i)
-    initial_means.append(np.mean(X_train[ids], axis = 0))
+#initial_means = []
+# for i in range(n_classes):
+#     ids = np.where(np.array(y_train) == i)
+#     initial_means.append(np.mean(X_train[ids], axis = 0))
 
+initial_means = np.array(
+        [X_train[y_train == i].mean(axis=0) for i in range(n_classes)]
+)
 print('initial_means', initial_means)
 # Train a Gaussian Mixture classifier on the training set
 clf = GaussianMixture(
     n_components=n_classes, covariance_type="full", means_init= initial_means#, max_iter=100, random_state=0
 )
+
 clf.fit(X_train, y_train)
 
 # Use the trained classifier to predict the classes of the test set
