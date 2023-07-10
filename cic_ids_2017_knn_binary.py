@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import Normalizer, OrdinalEncoder
 
@@ -57,7 +58,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_
 
 
 # Train a MLP classifier on the training set
-clf = KMeans(n_clusters = 2, n_init = 10)
+clf = KNeighborsClassifier(n_neighbors = 2)
 clf.fit(X_train, y_train)
 
 # # Use the trained classifier to predict the classes of the test set
