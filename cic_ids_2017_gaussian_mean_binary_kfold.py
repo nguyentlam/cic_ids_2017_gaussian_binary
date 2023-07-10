@@ -92,14 +92,3 @@ for train_index, val_index in kfold.split(X):
 print("Accuracies", accuracies) 
 average_accuracy = sum(accuracies) / len(accuracies)
 print(f"\nAverage Accuracy: {average_accuracy:.2f}")
-
-
-
-clf.fit(X_train, y_train)
-
-# Use the trained classifier to predict the classes of the test set
-y_pred = clf.predict(X_test)
-
-# # Evaluate the accuracy of the classifier
-accuracy = accuracy_score(y_test, y_pred)
-print("Accuracy:", accuracy)

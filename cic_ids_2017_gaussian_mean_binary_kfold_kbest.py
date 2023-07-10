@@ -53,7 +53,7 @@ X = cids_transformed[:, 0:78]
 Y = cids_transformed[:, 78]
 
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
+# X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
 
 # Define the number of features for feature selection
 k_feature = 10
@@ -62,7 +62,7 @@ k_feature = 10
 k_best = SelectKBest(score_func=f_classif, k=k_feature)
 
 # Feature selection
-X_train_selected = k_best.fit_transform(X, y)
+X_train_selected = k_best.fit_transform(X, Y)
 
 # Define the number of folds for cross-validation
 num_folds = 5
