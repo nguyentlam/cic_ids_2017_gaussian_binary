@@ -1,7 +1,7 @@
 
 import numpy as np
 import pandas as pd
-from my_gaussian_mixture2 import MyGaussianMixture3
+from my_gaussian_mixture3 import MyGaussianMixture3
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import accuracy_score
 from sklearn.mixture import GaussianMixture
