@@ -10,7 +10,7 @@ def get_initial_means(X, n_components, init_params="kmeans", r=0):
     ).fit(X)
     return gmm.means_
 
-def map_to_class(id_components, n_classes):
+def map_to_class(id_components, n_classes=2):
     return int(id_components / n_classes)
 
 class MyGaussianMixture2(BaseEstimator):
@@ -22,7 +22,7 @@ class MyGaussianMixture2(BaseEstimator):
     # find number of classes
     self.n_classes = int(y.max() + 1)
     
-    self.gm_means = []
+    self.gm_means = [None] * self.n_classes
     means_init = []
     # calculate means for each class
     for c in range(self.n_classes):
@@ -31,13 +31,18 @@ class MyGaussianMixture2(BaseEstimator):
       # calculate means for each classes
       means_c = get_initial_means(X_c, self.n_components)
       self.gm_means[c] = means_c
-      means_init.append(means_c)
+      means_init.extend(means_c)
     
+    print('means_init', means_init)
     self.gmm = GaussianMixture(n_components=self.n_classes * self.n_components, means_init=means_init)
     
     self.gmm.fit(X)
 
   def predict(self, X):
-    y_pre = self.predict(X)
-    map_to_class_func = np.vectorize(map_to_class)
-    return map_to_class_func(y_pre)
+    y_pre = self.gmm.predict(X)
+    y_pre_n = [None] * len(y_pre)
+    
+    for i in range(0,len(y_pre)):
+      y_pre_n[i] = int(y_pre / self.n_classes)
+    
+    return y_pre_n
