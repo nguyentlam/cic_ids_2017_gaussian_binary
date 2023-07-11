@@ -52,7 +52,7 @@ X = cids_transformed[:, 0:78]
 Y = cids_transformed[:, 78]
 
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 
 n_classes = 2
 
@@ -67,7 +67,7 @@ initial_means = np.array(
 print('initial_means', initial_means)
 # Train a Gaussian Mixture classifier on the training set
 clf = GaussianMixture(
-    n_components=n_classes, covariance_type="full", means_init= initial_means#, max_iter=100, random_state=0
+    n_components=n_classes, covariance_type="full", means_init= initial_means, max_iter=100, random_state=0
 )
 
 clf.fit(X_train, y_train)
