@@ -68,16 +68,6 @@ for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
     y_train, y_val = Y[train_index], Y[val_index]
 
-    initial_means = np.array(
-        [X_train[y_train == i].mean(axis=0) for i in range(n_classes)]
-    )
-
-    print('initial_means', initial_means)
-    # Train a Gaussian Mixture classifier on the training set
-    # clf = GaussianMixture(
-    #     n_components=n_classes, covariance_type="full", means_init= initial_means, max_iter=100, random_state=0
-    # )
-
     clf = MyGaussianMixture(
         n_components=2
     )
