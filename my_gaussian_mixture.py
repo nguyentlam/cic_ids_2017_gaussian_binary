@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.mixture import GaussianMixture
+from sklearn.preprocessing import normalize
 
 
 class MyGaussianMixture(BaseEstimator):
@@ -27,5 +28,13 @@ class MyGaussianMixture(BaseEstimator):
     log_likelihoods = np.hstack([ self.gm_densities[c].score_samples(X).reshape((-1, 1)) for c in range(self.n_classes) ])
     print('log_likelihoods', log_likelihoods)
     # return the class whose density maximizes the log likelihoods
-    class_idx = log_likelihoods.argmax(axis=1)
-    return class_idx
+    class_ids = log_likelihoods.argmax(axis=1)
+    return class_ids
+  
+  def predict_proba(self, X):
+    # calculate log likelihood for each class
+    log_likelihoods = np.hstack([ self.gm_densities[c].score_samples(X).reshape((-1, 1)) for c in range(self.n_classes) ])
+    
+    likelihoods = np.exp(log_likelihoods)
+    y_proba = normalize(likelihoods, axis=1, norm='l1')
+    return y_proba
