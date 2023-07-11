@@ -38,11 +38,35 @@ class MyGaussianMixture2(BaseEstimator):
     
     self.gmm.fit(X)
 
-  def predict(self, X):
+  def predict0(self, X):
     y_pre = self.gmm.predict(X)
     y_pre_n = [None] * len(y_pre)
     
     for i in range(0,len(y_pre)):
       y_pre_n[i] = int(y_pre[i] / self.n_classes)
+    
+    return y_pre_n
+
+  def predict_proba(self, X):
+    y_pre = self.gmm.predict_proba(X)
+    y_pre_n = [None] * len(y_pre)
+    
+    for i, ye in enumerate(y_pre):
+      ye_arr = np.array_split(ye, self.n_components)
+      new_arr = []
+      
+      for _, arr in enumerate(ye_arr):
+        new_arr.append(np.sum(arr))
+
+      y_pre_n[i] = new_arr
+    
+    return y_pre_n
+  
+  def predict(self, X):
+    y_pre_prob = self.predict_proba(X)
+    y_pre_n = [None] * len(y_pre_prob)
+    
+    for i, ye in enumerate(y_pre_prob):
+      y_pre_n[i] = np.array(ye).argmax(axis=1)
     
     return y_pre_n
