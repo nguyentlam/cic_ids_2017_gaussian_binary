@@ -84,7 +84,7 @@ for train_index, val_index in kfold.split(X_train_selected):
     print('initial_means', initial_means)
     # Train a Gaussian Mixture classifier on the training set
     clf = GaussianMixture(
-        n_components=n_classes, covariance_type="full", means_init= initial_means#, max_iter=100, random_state=0
+        n_components=n_classes, covariance_type="full", means_init= initial_means, max_iter=100, random_state=0
     )
 
     # Train and evaluate your model

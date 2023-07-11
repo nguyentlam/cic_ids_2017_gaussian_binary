@@ -2,9 +2,10 @@
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.metrics import accuracy_score
 from sklearn.mixture import GaussianMixture
-from sklearn.model_selection import KFold, cross_val_score, train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import Normalizer, OrdinalEncoder
 
 cids = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
@@ -51,44 +52,39 @@ cids_transformed = ct.transform(cids)
 X = cids_transformed[:, 0:78]
 Y = cids_transformed[:, 78]
 
+# Define the number of features for feature selection
+k_feature = 10
+
+# Create an instance of SelectKBest with the desired scoring function
+k_best = SelectKBest(score_func=f_classif, k=k_feature)
+
+# Feature selection
+X_train_selected = k_best.fit_transform(X, Y)
+
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
-
-# Define the number of folds for cross-validation
-num_folds = 5
-
-# Create the k-fold cross-validation object
-kfold = KFold(n_splits=num_folds, random_state=42, shuffle=True)
+X_train, X_test, y_train, y_test = train_test_split(X_train_selected, Y, test_size=0.2, random_state=37)
 
 n_classes = 2
 
-accuracies = []
-for train_index, val_index in kfold.split(X):
-    X_train, X_val = X[train_index], X[val_index]
-    y_train, y_val = Y[train_index], Y[val_index]
+#initial_means = []
+# for i in range(n_classes):
+#     ids = np.where(np.array(y_train) == i)
+#     initial_means.append(np.mean(X_train[ids], axis = 0))
 
-    initial_means = np.array(
+initial_means = np.array(
         [X_train[y_train == i].mean(axis=0) for i in range(n_classes)]
-    )
+)
+print('initial_means', initial_means)
+# Train a Gaussian Mixture classifier on the training set
+clf = GaussianMixture(
+    n_components=n_classes, covariance_type="full", means_init= initial_means, max_iter=100, random_state=0
+)
 
-    print('initial_means', initial_means)
-    # Train a Gaussian Mixture classifier on the training set
-    clf = GaussianMixture(
-        n_components=n_classes, covariance_type="full", means_init= initial_means, max_iter=100, random_state=0
-    )
+clf.fit(X_train, y_train)
 
-    # Train and evaluate your model
-    clf.fit(X_train, y_train)
+# Use the trained classifier to predict the classes of the test set
+y_pred = clf.predict(X_test)
 
-    # score = clf.score(X_val_selected, y_val)
-    # Use the trained classifier to predict the classes of the test set
-    y_pred = clf.predict(X_val)
-
-    # # Evaluate the accuracy of the classifier
-    accuracy = accuracy_score(y_val, y_pred)
-    print("Accuracy:", accuracy)
-    accuracies.append(accuracy)
-    
-print("Accuracies", accuracies) 
-average_accuracy = sum(accuracies) / len(accuracies)
-print(f"\nAverage Accuracy: {average_accuracy:.2f}")
+# # Evaluate the accuracy of the classifier
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
