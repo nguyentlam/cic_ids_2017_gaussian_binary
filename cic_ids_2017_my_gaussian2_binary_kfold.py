@@ -1,7 +1,7 @@
 
 import numpy as np
 import pandas as pd
-from my_gaussian_mixture import MyGaussianMixture
+from my_gaussian_mixture2 import MyGaussianMixture2
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import accuracy_score
 from sklearn.mixture import GaussianMixture
@@ -65,7 +65,7 @@ for train_index, val_index in kfold.split(X):
     X_train, X_val = X[train_index], X[val_index]
     y_train, y_val = Y[train_index], Y[val_index]
 
-    clf = MyGaussianMixture(
+    clf = MyGaussianMixture2(
         n_components=2
     )
 
@@ -76,8 +76,6 @@ for train_index, val_index in kfold.split(X):
     # Use the trained classifier to predict the classes of the test set
     y_pred = clf.predict(X_val)
 
-    y_pred_proba = clf.predict_proba(X_val)
-    print("y_pred_proba[0:3]:", y_pred_proba[0:3])
     # # Evaluate the accuracy of the classifier
     accuracy = accuracy_score(y_val, y_pred)
     print("Accuracy:", accuracy)
