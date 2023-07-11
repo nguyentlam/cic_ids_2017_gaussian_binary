@@ -52,9 +52,6 @@ cids_transformed = ct.transform(cids)
 X = cids_transformed[:, 0:78]
 Y = cids_transformed[:, 78]
 
-# Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=37)
-
 # Define the number of folds for cross-validation
 num_folds = 5
 
