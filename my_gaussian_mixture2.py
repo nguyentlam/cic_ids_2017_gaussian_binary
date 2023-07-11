@@ -43,6 +43,6 @@ class MyGaussianMixture2(BaseEstimator):
     y_pre_n = [None] * len(y_pre)
     
     for i in range(0,len(y_pre)):
-      y_pre_n[i] = int(y_pre / self.n_classes)
+      y_pre_n[i] = int(y_pre[i] / self.n_classes)
     
     return y_pre_n
