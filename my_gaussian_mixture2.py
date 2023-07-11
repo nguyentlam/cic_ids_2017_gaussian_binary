@@ -64,9 +64,6 @@ class MyGaussianMixture2(BaseEstimator):
   
   def predict(self, X):
     y_pre_prob = self.predict_proba(X)
-    # y_pre_n = [None] * len(y_pre_prob)
-    
-    # for i, ye in enumerate(y_pre_prob):
-    #   y_pre_n[i] = np.array(ye).argmax(axis=1)
+
     y_pre_n = np.array(y_pre_prob).argmax(axis=1)
     return y_pre_n
