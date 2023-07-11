@@ -34,7 +34,7 @@ class MyGaussianMixture2(BaseEstimator):
       means_init.extend(means_c)
     
     print('means_init', means_init)
-    self.gmm = GaussianMixture(n_components=self.n_classes * self.n_components, means_init=means_init)
+    self.gmm = GaussianMixture(n_components=self.n_classes * self.n_components, means_init=means_init, random_state=0)
     
     self.gmm.fit(X)
 
