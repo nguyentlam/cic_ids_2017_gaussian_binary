@@ -71,7 +71,7 @@ print('feature1', feature1)
 num_folds = 5
 
 # Create the k-fold cross-validation object
-kfold = KFold(n_splits=num_folds)
+kfold = KFold(n_splits=num_folds, random_state=42, shuffle=True)
 
 # create lam parameter for PyGAM classifier
 lamda = 1e6
