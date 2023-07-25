@@ -42,8 +42,8 @@ numberic_columns = [' Destination Port', ' Flow Duration', ' Total Fwd Packets',
        ' min_seg_size_forward', 'Active Mean', ' Active Std', ' Active Max',
        ' Active Min', 'Idle Mean', ' Idle Std', ' Idle Max', ' Idle Min']
 
-ct = ColumnTransformer(transformers = [#('normalize', Normalizer(norm='l2'), numberic_columns),
-                                          ('standard', StandardScaler(), numberic_columns),
+ct = ColumnTransformer(transformers = [('normalize', Normalizer(norm='l2'), numberic_columns),
+                                        #  ('standard', StandardScaler(), numberic_columns),
                                        ("label", OrdinalEncoder(), categorical_columns)], remainder = 'passthrough')
 
 ct.fit(cids)
@@ -53,7 +53,7 @@ X = cids_transformed[:, 0:78]
 y = cids_transformed[:, 78]
 
 # Define the number of features for feature selection
-k_feature = 10
+k_feature = 15
 
 # Create an instance of SelectKBest with the desired scoring function
 k_best = SelectKBest(score_func=f_classif, k=k_feature)
@@ -74,7 +74,7 @@ num_folds = 5
 kfold = KFold(n_splits=num_folds)
 
 # create lam parameter for PyGAM classifier
-lamda = 10.0
+lamda = 1e6
 lam = np.empty(k_feature)
 lam.fill(lamda)
 
